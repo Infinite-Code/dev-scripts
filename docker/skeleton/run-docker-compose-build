@@ -9,6 +9,10 @@ PYTHONPATH=${1}
 
 ( cd ../..; ${PYTHONPATH} ./manage.py collectstatic --noinput; )
 
+# we do this to maximise caching,
+# and keep dependencies in requirements.txt
+python ./gen-dockerfiles-from-template.py
+
 docker-compose build
 
 echo BUILD_NO=${BUILD_NO}
