@@ -54,6 +54,7 @@ aws ecr get-login --region us-east-1 | bash
 BUILD_NO=LATEST_TAG_HERE ecs-cli compose --file docker-compose-ecs.yml service up
 ```
  * If you have an existing running service, you might need to do a stop and start
+   
    NOTE: This could be due to memory limits in ECS instance
 
 Check out, if it is running properly:
