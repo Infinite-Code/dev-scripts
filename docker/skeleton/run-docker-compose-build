@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+export BUILD_NO=`date -u "+%Y%m%d%H%M"`
+
+PYTHONPATH=${1}
+[ -z "${PYTHONPATH}" ] && echo WARNING: Please specify PYTHONPATH param to run manage.py;
+
+( cd ../..; ${PYTHONPATH} ./manage.py collectstatic --noinput; )
+
+docker-compose build
+
+echo BUILD_NO=${BUILD_NO}

@@ -1,0 +1,20 @@
+version: '2'
+services:
+    webserver:
+        image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/webserver:${BUILD_NO}
+        mem_limit: 52428800
+        ports:
+            - "80:80"
+            - "443:443"
+        links:
+            - appserver
+    appserver:
+        image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/appserver:${BUILD_NO}
+        mem_limit: 314572800
+        ports:
+            - "8000:8000"
+        environment:
+            - APPSERVER_DB_HOST=YOUR_DB_HOST
+              APPSERVER_DB_USER=YOUR_DB_USERNAME
+              APPSERVER_DB_PASSWORD=YOUR_DB_PASSWORD
+              APPSERVER_DB_NAME=YOUR_DB_NAME

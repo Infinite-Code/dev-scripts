@@ -1,0 +1,23 @@
+FROM ubuntu:14.04
+
+RUN apt-get -y update && apt-get install -y python3.4 python3.4-venv python3-dev
+RUN apt-get install -y zlib1g-dev libjpeg-dev 
+RUN apt-get install -y sqlite3 libpq-dev
+
+# copy the requirements.txt individually so that
+if the requirements.txt file changed, re-run pip install
+# otherwise, it will use cached version even though other files are modified
+RUN python3.4 -mvenv /app/venv/YOUR_PROJECT_NAME/
+COPY ./requirements.txt /app/venv/YOUR_PROJECT_NAME/
+RUN /app/venv/YOUR_PROJECT_NAME/bin/pip install -r /app/venv/YOUR_PROJECT_NAME/requirements.txt
+
+COPY ./ /app/src/YOUR_PROJECT_NAME/
+COPY devops/files/YOUR_PROJECT_NAME/settings_local.py /app/src/YOUR_PROJECT_NAME/YOUR_PROJECT_NAME/
+
+WORKDIR /app/src/YOUR_PROJECT_NAME
+ENTRYPOINT ["/app/venv/YOUR_PROJECT_NAME/bin/python", "manage.py"]
+CMD ["runserver", "--noreload", "--no-color", "0.0.0.0:8000"]
+EXPOSE 8000
+
+MAINTAINER Infinite Code
+LABEL version="1.0"

@@ -1,0 +1,40 @@
+version: '2'
+services:
+    webserver:
+        build:
+            # NOTE: The script assumes the files are in devops/docker
+            # folder path which is at the root of the django project
+            context: ../../
+            dockerfile: devops/docker/Dockerfile.webserver
+        image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/webserver:${BUILD_NO}
+        mem_limit: 52428800
+        ports:
+            - "80:80"
+            - "443:443"
+        links:
+            - appserver
+    appserver:
+        build:
+            context: ../../
+            dockerfile: devops/docker/Dockerfile.appserver
+        image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/appserver:${BUILD_NO}
+        mem_limit: 314572800
+        ports:
+            - "8000:8000"
+        environment:
+            - APPSERVER_DB_HOST=dbserver
+            - APPSERVER_DB_USER=YOUR_DB_USERNAME
+        links:
+            - dbserver
+    dbserver:
+        build:
+            context: ../../
+            dockerfile: devops/docker/Dockerfile.dbserver
+        image: dbserver
+        ports:
+            - "5432:5432"
+        volumes:
+            - PATH_TO_PGSQL_DATA_FOLDER:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_USER=YOUR_DB_USERNAME
+            - POSTGRES_DB=YOUR_DB_NAME
