@@ -40,7 +40,7 @@ ecs-cli configure --region us-east-1 --access-key YOUR_AWS_ACCESS_KEY_ID --secre
 ecs-cli up --keypair YOUR_AWS_KEY_PAIR --capability-iam --size 1 --instance-type t2.micro
 ```
 
-When you do any updates, you need to do the following:
+When you do any updates, you need to do the following (the scripts assumes you are using Python+Django):
 ```
 ./run-docker-compose-build PATH_TO_PYTHON_IN_VIRTUALENV
 
