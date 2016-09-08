@@ -42,14 +42,14 @@ ecs-cli up --keypair YOUR_AWS_KEY_PAIR --capability-iam --size 1 --instance-type
 
 When you do any updates, you need to do the following:
 ```
-# you might need to do docker login here, with this command
-aws ecr get-login --region us-east-1 | bash
 ./run-docker-compose-build PATH_TO_PYTHON_IN_VIRTUALENV
 
 # test it locally, you can get LATEST_TAG_HERE from output or by running: docker images
 BUILD_NO=LATEST_TAG_HERE docker-compose up
 
 # once ready, push to AWS ECR and then bring the service up
+# you might need to do docker login here, with this command
+aws ecr get-login --region us-east-1 | bash
 ./docker-push
 BUILD_NO=LATEST_TAG_HERE ecs-cli compose --file docker-compose-ecs.yml service up
 ```
