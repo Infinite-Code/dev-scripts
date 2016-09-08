@@ -6,7 +6,7 @@ services:
             # folder path which is at the root of the django project
             context: ../../
             dockerfile: devops/docker/Dockerfile.webserver
-        image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/webserver:${BUILD_NO}
+        image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/YOUR_PROJECT_NAME-webserver:${BUILD_NO}
         mem_limit: 52428800
         ports:
             - "80:80"
@@ -17,7 +17,7 @@ services:
         build:
             context: ../../
             dockerfile: devops/docker/Dockerfile.appserver
-        image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/appserver:${BUILD_NO}
+        image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/YOUR_PROJECT_NAME-appserver:${BUILD_NO}
         mem_limit: 314572800
         ports:
             - "8000:8000"

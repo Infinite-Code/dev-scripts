@@ -1,7 +1,7 @@
 version: '2'
 services:
     webserver:
-        image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/webserver:${BUILD_NO}
+        image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/YOUR_PROJECT_NAME-webserver:${BUILD_NO}
         mem_limit: 52428800
         ports:
             - "80:80"
@@ -9,7 +9,7 @@ services:
         links:
             - appserver
     appserver:
-        image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/appserver:${BUILD_NO}
+        image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/YOUR_PROJECT_NAME-appserver:${BUILD_NO}
         mem_limit: 314572800
         ports:
             - "8000:8000"
