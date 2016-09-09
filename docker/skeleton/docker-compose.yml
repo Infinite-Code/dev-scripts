@@ -7,25 +7,26 @@ services:
             context: ../../
             dockerfile: devops/docker/Dockerfile.webserver
         image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/YOUR_PROJECT_NAME-webserver:${BUILD_NO}
-        mem_limit: 52428800
+        mem_limit: 50M
         ports:
             - "80:80"
             - "443:443"
         links:
             - appserver
+
     appserver:
         build:
             context: ../../
             dockerfile: devops/docker/Dockerfile.appserver
         image: YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/YOUR_PROJECT_NAME-appserver:${BUILD_NO}
-        mem_limit: 314572800
+        mem_limit: 200M
         ports:
             - "8000:8000"
-        environment:
-            - APPSERVER_DB_HOST=dbserver
-            - APPSERVER_DB_USER=YOUR_DB_USERNAME
+        env_file:
+            - appserver-dev.env
         links:
             - dbserver
+
     dbserver:
         build:
             context: ../../
@@ -38,3 +39,4 @@ services:
         environment:
             - POSTGRES_USER=YOUR_DB_USERNAME
             - POSTGRES_DB=YOUR_DB_NAME
+
