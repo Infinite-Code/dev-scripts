@@ -1,8 +1,8 @@
 FROM ubuntu:14.04
 
-RUN apt-get -y update && apt-get install -y python3.4 python3.4-venv python3-dev
-RUN apt-get install -y zlib1g-dev libjpeg-dev 
-RUN apt-get install -y sqlite3 libpq-dev
+RUN apt-get -y update
+
+RUN apt-get install -y python3.4 python3.4-venv python3-dev
 
 # copy the requirements.txt individually so that
 # if the requirements.txt file changed, re-run pip install
@@ -11,12 +11,15 @@ RUN python3.4 -mvenv /app/venv/YOUR_PROJECT_NAME/
 RUN /app/venv/YOUR_PROJECT_NAME/bin/pip install --upgrade pip==8.1.2
 RUN /app/venv/YOUR_PROJECT_NAME/bin/pip INJECT_FROM_REQUIREMENTS:../../requirements.txt
 
+# clean up
+RUN rm -Rf /app/pip-packages/
+
 COPY ./ /app/src/YOUR_PROJECT_NAME/
 COPY devops/files/YOUR_PROJECT_NAME/settings_local.py /app/src/YOUR_PROJECT_NAME/YOUR_PROJECT_NAME/
 
 WORKDIR /app/src/YOUR_PROJECT_NAME
-ENTRYPOINT ["/app/venv/YOUR_PROJECT_NAME/bin/python", "manage.py"]
-CMD ["runserver", "--noreload", "--no-color", "0.0.0.0:8000"]
+ENTRYPOINT ["/app/venv/YOUR_PROJECT_NAME/bin/gunicorn", "YOUR_PROJECT_NAME.wsgi"]
+CMD ["--bind", "0.0.0.0:8000", "--error-logfile", "-", "--access-logfile", "-"]
 EXPOSE 8000
 
 MAINTAINER Infinite Code
