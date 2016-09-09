@@ -37,12 +37,10 @@ ecs-cli ps
 Miscellaneous
 -------------
 .dockerignore
-
  * Setup this file in the docker context (normally the root of the project
    source folder) to ignore certain files from being copied
 
 requirements-dependencies.yml
-
  * Setup this file in the same folder as your requirements.txt, to define
    system packages thats needs to be installed to build that package.
    Please check out the requirements-dependencies.yml for an example.
