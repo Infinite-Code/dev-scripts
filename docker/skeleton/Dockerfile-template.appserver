@@ -8,7 +8,8 @@ RUN apt-get install -y sqlite3 libpq-dev
 # if the requirements.txt file changed, re-run pip install
 # otherwise, it will use cached version even though other files are modified
 RUN python3.4 -mvenv /app/venv/YOUR_PROJECT_NAME/
-RUN /app/venv/YOUR_PROJECT_NAME/bin/pip install INJECT_FROM_REQUIREMENTS:../../requirements.txt
+RUN /app/venv/YOUR_PROJECT_NAME/bin/pip install --upgrade pip==8.1.2
+RUN /app/venv/YOUR_PROJECT_NAME/bin/pip INJECT_FROM_REQUIREMENTS:../../requirements.txt
 
 COPY ./ /app/src/YOUR_PROJECT_NAME/
 COPY devops/files/YOUR_PROJECT_NAME/settings_local.py /app/src/YOUR_PROJECT_NAME/YOUR_PROJECT_NAME/
