@@ -15,4 +15,5 @@ python ./gen-dockerfiles-from-template.py
 
 docker-compose build
 
+echo ${BUILD_NO} > .build_no
 echo BUILD_NO=${BUILD_NO}

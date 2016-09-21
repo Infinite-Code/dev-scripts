@@ -1,3 +1,26 @@
-.DS_Store
+# repo stuff
 .git
-__pycache__
+.dockerignore
+
+# OSX stuff
+.DS_Store
+**/.DS_Store
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+**/*.pyc
+
+# SQLite
+*.sqlite3
+
+# text editors
+.idea
+*.swp
+**/*.swp
+
+# Celery-related data
+celerybeat-schedule
+
+devops/docker
+devops/ansible
+

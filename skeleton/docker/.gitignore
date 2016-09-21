@@ -1,1 +1,7 @@
 Dockerfile.*
+appserver-dev.env
+
+.buildcache-*
+cache-*.tgz
+
+.build_no

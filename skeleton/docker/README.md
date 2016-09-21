@@ -1,37 +1,63 @@
 Overview
 --------
 For OSX, recommended to use Docker for Mac, https://docs.docker.com/engine/installation/mac/
+
  * The previous (older) version is Docker Toolbox
 
 
-Building Docker Images
-----------------------
-Setup which you probably just need to do one time:
+Building Docker Images and AWS ECR
+----------------------------------
+To build a new docker image, run the following command (the scripts assumes
+you are using Python+Django). Specify the path to PYTHON bin, if needed.
 ```
-ecs-cli configure --region us-east-1 --access-key YOUR_AWS_ACCESS_KEY_ID --secret-key YOUR_AWS_SECRET_ACCESS_KEY --cluster YOUR_CLUSTER_NAME
-ecs-cli up --keypair YOUR_AWS_KEY_PAIR --capability-iam --size 1 --instance-type t2.micro
+make build [PYTHON=${PATH_TO_PYTHON_IN_VIRTUALENV}]
 ```
 
-When you do any updates, you need to do the following (the scripts assumes you are using Python+Django):
-```
-./run-docker-compose-build PATH_TO_PYTHON_IN_VIRTUALENV
+To start the docker service (containers), run the following.
 
-# test it locally, you can get LATEST_TAG_HERE from output or by running: docker images
-BUILD_NO=LATEST_TAG_HERE docker-compose up
-
-# once ready, push to AWS ECR and then bring the service up
-# you might need to do docker login here, with this command
-aws ecr get-login --region us-east-1 | bash
-./docker-push
-BUILD_NO=LATEST_TAG_HERE ecs-cli compose --file docker-compose-ecs.yml service up
+ * Specify the ```BUILD_NO```, if needed. By default, it will use the build
+   number from ```.build_no``` file. Get build no from script output or
+   ```docker images```
+ * NOTE: You might need to setup some ```*.env``` files for some configuration
 ```
- * If you have an existing running service, you might need to do a stop and start
-   
-   NOTE: This could be due to memory limits in ECS instance
-
-Check out, if it is running properly:
+make up [BUILD_NO=${LATEST_TAG_HERE}]
 ```
-ecs-cli ps
+
+Once ready, push new images to AWS ECR
+```
+make push
+```
+ * NOTE: You might need to do ```docker login``` here, with this command:
+
+        aws ecr get-login --region ap-southeast-1 | bash
+
+
+Base Images
+-----------
+There are new version for the specific version of the images that we depend
+on such as ubuntu. To make full use of the build cache, we need to pull the
+right image.
+```
+make pull-base-images
+```
+
+
+Reuse Build Cache
+-----------------
+If we want to share the cache on different machines,
+we need to rebuild the build cache.
+
+Install instructions for ```buildcache``` command:
+https://github.com/tonistiigi/buildcache
+
+Once you have that command, just run:
+```
+make save-build-cache
+```
+
+On the new machine, save the build cache files in the docker folder and run:
+```
+make load-build-cache
 ```
 
 Miscellaneous
@@ -44,6 +70,28 @@ requirements-dependencies.yml
  * Setup this file in the same folder as your requirements.txt, to define
    system packages thats needs to be installed to build that package.
    Please check out the requirements-dependencies.yml for an example.
+
+
+Using AWS ECS
+-------------
+Configure AWS ECS CLI and bring new cluster up, probably just a one time thing:
+```
+ecs-cli configure --region ap-southeast-1 --access-key YOUR_AWS_ACCESS_KEY_ID --secret-key YOUR_AWS_SECRET_ACCESS_KEY --cluster PROJECT_NAME
+ecs-cli up --keypair YOUR_AWS_KEY_PAIR --capability-iam --size 1 --instance-type t2.micro
+```
+
+To update the service in AWS ECS (please ensure new images pushed to AWS ECR):
+```
+BUILD_NO=${LATEST_TAG_HERE} ecs-cli compose --file docker-compose-ecs.yml service up
+```
+ * If you have an existing running service, you might need to do a stop and start
+   
+   NOTE: This could be due to memory limits in ECS instance
+
+Check out, if it is running properly:
+```
+ecs-cli ps
+```
 
 
 Versions
