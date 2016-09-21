@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+REPOS=`grep 'image: .*amazonaws.com' docker-compose.yml | cut -d ':' -f 2`
+for REPO in $REPOS; do
+    docker pull --all-tags $REPO;
+done;
+
