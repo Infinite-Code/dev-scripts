@@ -1,0 +1,14 @@
+---
+  - copy: src=../files/ssh/authorized_keys dest={{ HOME }}/.ssh mode=0600
+  - yum: name=docker update_cache=yes
+    become: yes
+  - service: name=docker state=started enabled=yes
+    become: yes
+  - synchronize: src=../../docker/ dest={{ HOME }}/docker/ use_ssh_args=yes
+  - user: name={{ USER }} groups=docker append=yes
+    become: yes
+  - pip: name=docker-compose version=1.8.0
+    become: yes
+  - pip: name=docker-py version=1.9.0
+    become: yes
+  - docker_login: username=AWS password={{ AWS_ECR_PWD }} registry="https://YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com" email=""

@@ -1,0 +1,10 @@
+---
+- hosts: appservers
+  vars:
+  vars_files:
+  - common_vars.yml
+  tasks:
+  - include: common_tasks.yml
+  - docker_service: services=webserver,appserver state=present project_src={{ HOME }}/docker files=docker-compose-ec2.yml
+    environment:
+        BUILD_NO: "{{ BUILD_NO }}"
