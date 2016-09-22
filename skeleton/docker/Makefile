@@ -19,11 +19,11 @@ build:
 	./run-docker-compose-build $(PYTHON)
 
 push:
-	aws ecr get-login --region ap-southeast-1 | bash && \
+	aws ecr get-login | bash && \
 	./docker-push
 
 pull:
-	aws ecr get-login --region ap-southeast-1 | bash && \
+	aws ecr get-login | bash && \
 	./docker-pull
 
 ecr-list-images:
