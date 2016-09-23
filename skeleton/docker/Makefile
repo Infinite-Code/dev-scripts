@@ -2,6 +2,7 @@ ifndef BUILD_NO
 BUILD_NO = $(shell cat .build_no)
 endif
 
+IMAGE_WEBSERVER = YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/YOUR_PROJECT_NAME-webserver:$(BUILD_NO)
 IMAGE_APPSERVER = YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/YOUR_PROJECT_NAME-appserver:$(BUILD_NO)
 
 help:
@@ -61,7 +62,7 @@ ifndef COMMAND
 else
 	ENTRYPOINT=$(ENTRYPOINT); \
 	[ -z "$${ENTRYPOINT}" ] && ENTRYPOINT="/app/venv/YOUR_PROJECT_NAME/bin/python manage.py"; \
-	BUILD_NO=$(BUILD_NO) docker-compose run --rm --entrypoint "$${ENTRYPOINT}" appserver $(COMMAND)
+	BUILD_NO=$(BUILD_NO) docker-compose run --rm --no-deps --entrypoint "$${ENTRYPOINT}" appserver $(COMMAND)
 endif
 
 
@@ -96,7 +97,7 @@ endif
 # Helpers / Utils #
 # --------------- #
 save-build-cache: check-build-no
-	buildcache save -o cache-webserver.tgz YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/YOUR_PROJECT_NAME-webserver:$(BUILD_NO)
+	buildcache save -o cache-webserver.tgz $(IMAGE_WEBSERVER)
 	buildcache save -o cache-appserver.tgz $(IMAGE_APPSERVER)
 
 load-build-cache:
