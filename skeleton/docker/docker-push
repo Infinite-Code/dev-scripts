@@ -3,6 +3,8 @@
 set -e
 
 REPOS=`grep 'image: .*amazonaws.com' docker-compose.yml | cut -d ':' -f 2`
-for REPO in $REPOS; do
-    docker push $REPO;
+for REPO in ${REPOS}; do
+    NAME=${REPO}
+    [ -n "${BUILD_NO}" ] && NAME=${NAME}:${BUILD_NO}
+    docker push ${NAME};
 done;

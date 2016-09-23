@@ -7,7 +7,11 @@ export BUILD_NO=`date -u "+%Y%m%d%H%M"`
 PYTHONPATH=${1}
 [ -z "${PYTHONPATH}" ] && echo WARNING: Please specify PYTHONPATH param to run manage.py;
 
+# collect static files
 ( cd ../..; ${PYTHONPATH} ./manage.py collectstatic --noinput; )
+
+# generate git commit file in the context
+git rev-parse HEAD > ../../.gitcommit
 
 # we do this to maximise caching,
 # and keep dependencies in requirements.txt

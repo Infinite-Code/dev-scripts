@@ -21,6 +21,7 @@
 # Celery-related data
 celerybeat-schedule
 
+# docker
 devops/docker
 devops/ansible
 

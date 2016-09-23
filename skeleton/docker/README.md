@@ -23,13 +23,28 @@ To start the docker service (containers), run the following.
 make up [BUILD_NO=${LATEST_TAG_HERE}]
 ```
 
+If you want to run django DB migrate you can use (by default the ENTRYPOINT
+for this is manage.py):
+```
+make run COMMAND=migrate
+```
+You can run other types of one-off commands like this:
+```
+make run ENTRYPOINT=ls COMMAND=-lth
+```
+
 Once ready, push new images to AWS ECR
 ```
 make push
 ```
- * NOTE: You might need to do ```docker login``` here, with this command:
 
-        aws ecr get-login --region ap-southeast-1 | bash
+
+Inspecting Images
+-----------------
+You can use this command to figure out which git commit for a build:
+```
+make get-image-git-commit
+```
 
 
 Base Images
@@ -82,15 +97,21 @@ ecs-cli up --keypair YOUR_AWS_KEY_PAIR --capability-iam --size 1 --instance-type
 
 To update the service in AWS ECS (please ensure new images pushed to AWS ECR):
 ```
-BUILD_NO=${LATEST_TAG_HERE} ecs-cli compose --file docker-compose-ecs.yml service up
+make ecs-up [BUILD_NO=${LATEST_TAG_HERE}]
 ```
  * If you have an existing running service, you might need to do a stop and start
    
    NOTE: This could be due to memory limits in ECS instance
 
-Check out, if it is running properly:
+Check out, if the containers are running properly:
 ```
-ecs-cli ps
+make ecs-ps
+```
+
+You can get more details by getting the JSON for the ECS service in the
+events field, the first item is the latest one:
+```
+make ecs-service-info
 ```
 
 
@@ -125,7 +146,9 @@ $ docker-machine version
 docker-machine version 0.8.0, build b85aac1
 ```
 
+
 Troubleshooting
 ---------------
 Check here for more info:
  * https://github.com/Infinite-Code/dev-scripts/wiki/Troubleshooting-Docker-and-AWS-ECS
+
