@@ -10,8 +10,13 @@ endif
 IMAGE_WEBSERVER = YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/YOUR_PROJECT_NAME-webserver:$(BUILD_NO)
 IMAGE_APPSERVER = YOUR_PATH_TO_YOUR_ECR_REPO.amazonaws.com/YOUR_PROJECT_NAME-appserver:$(BUILD_NO)
 
+CLUSTER_NAME = YOUR_CLUSTER_NAME
+
 help:
-	@echo "Check Makefile for the available targets/commands"
+	@echo "===================="
+	@echo " COMMANDS / TARGETS "
+	@echo "===================="
+	@grep '\(^# \|^[^: ]*:\)' Makefile | sed 's/:.*//'
 
 # ---------------------- #
 # Building Docker Images #
@@ -101,7 +106,7 @@ ecs-ps:
 	ecs-cli ps
 
 ecs-service-info:
-	aws ecs describe-services --cluster YOUR_CLUSTER_NAME --service ecscompose-service-docker
+	aws ecs describe-services --cluster $(CLUSTER_NAME) --service ecscompose-service-docker
 
 ecs-task-defs:
 	aws ecs list-task-definitions | grep task-definition | sed 's/.*task-definition\/\([^"]*\)",*/\1/'
@@ -115,8 +120,8 @@ else
 endif
 
 ecs-get-ip-address:
-	@aws ecs list-container-instances --cluster YOUR_CLUSTER_NAME
-	@echo "CONTAINER_INSTANCE: " && read CONTAINER_INSTANCE && aws ecs describe-container-instances --cluster YOUR_CLUSTER_NAME --container-instances $${CONTAINER_INSTANCE} | grep -C2 -i instance
+	@aws ecs list-container-instances --cluster $(CLUSTER_NAME)
+	@echo "CONTAINER_INSTANCE: " && read CONTAINER_INSTANCE && aws ecs describe-container-instances --cluster $(CLUSTER_NAME) --container-instances $${CONTAINER_INSTANCE} | grep -C2 -i instance
 	@echo "INSTANCE_ID: " && read INSTANCE_ID && aws ec2 describe-instances --instance-ids $${INSTANCE_ID} | grep -C2 -i ipaddress
 	@echo "TO SSH INTO ECS Instance, do the following (also double check Security Group, to ensure you can SSH):"
 	@echo ./ssh-ecs
@@ -130,7 +135,7 @@ ec2-add-inbound-ssh:
 
 ecs-cluster-info: get-public-ip
 	# info used for ec2-add-inbound-ssh
-	@./ecs-get-cluster-info YOUR_CLUSTER_NAME
+	@./ecs-get-cluster-info $(CLUSTER_NAME)
 
 # --------------- #
 # Helpers / Utils #
