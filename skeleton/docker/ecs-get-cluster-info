@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+import boto3
+
+import sys
+
+
+cluster = sys.argv[1]
+
+
+def main():
+    ecs = boto3.client('ecs')
+    ec2 = boto3.client('ec2')
+
+    res1 = ecs.list_container_instances(cluster=cluster)
+    for i in res1['containerInstanceArns']:
+        parts = i.split('/')
+        container_instance = parts[1]
+
+        res2 = ecs.describe_container_instances(
+            cluster=cluster, containerInstances=[container_instance])
+        for j in res2['containerInstances']:
+            print('CONTAINER INSTANCE ARN: ', j['containerInstanceArn'])
+            instance_id = j['ec2InstanceId']
+            print('EC2 INSTANCE: ', instance_id)
+
+            res3 = ec2.describe_instances(InstanceIds=[instance_id])
+            for k in res3['Reservations']:
+                for m in (k['Instances']):
+                    print('PUBLIC IP: ', m['PublicIpAddress'])
+                    for n in m['SecurityGroups']:
+                        print('SECURITY GROUP ID: ', n['GroupId'])
+
+
+if __name__ == '__main__':
+    main()

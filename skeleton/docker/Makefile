@@ -114,6 +114,23 @@ else
 	aws ecs describe-task-definition --task-definition=$(TASK_DEF)
 endif
 
+ecs-get-ip-address:
+	@aws ecs list-container-instances --cluster YOUR_CLUSTER_NAME
+	@echo "CONTAINER_INSTANCE: " && read CONTAINER_INSTANCE && aws ecs describe-container-instances --cluster YOUR_CLUSTER_NAME --container-instances $${CONTAINER_INSTANCE} | grep -C2 -i instance
+	@echo "INSTANCE_ID: " && read INSTANCE_ID && aws ec2 describe-instances --instance-ids $${INSTANCE_ID} | grep -C2 -i ipaddress
+	@echo "TO SSH INTO ECS Instance, do the following (also double check Security Group, to ensure you can SSH):"
+	@echo ./ssh-ecs
+
+ec2-security-groups:
+	@echo "INSTANCE_ID: " && read INSTANCE_ID && aws ec2 describe-instances --instance-ids $${INSTANCE_ID} | grep -C2 -i group
+	@echo "GROUP_ID: " && read GROUP_ID && aws ec2 describe-security-groups --group-ids  $${GROUP_ID}
+
+ec2-add-inbound-ssh:
+	@echo "GROUP_ID: " && read GROUP_ID && echo "IP_ADDRESS: " && read IP_ADDRESS && aws ec2 authorize-security-group-ingress --group-id $${GROUP_ID} --protocol tcp --port 22 --cidr $${IP_ADDRESS}/32
+
+ecs-cluster-info: get-public-ip
+	# info used for ec2-add-inbound-ssh
+	@./ecs-get-cluster-info YOUR_CLUSTER_NAME
 
 # --------------- #
 # Helpers / Utils #
@@ -134,3 +151,6 @@ check-build-no:
 		exit 1; \
 	fi;
 
+get-public-ip:
+	@echo LAN PUBLIC IP:
+	@wget http://ipinfo.io/ip -qO -
