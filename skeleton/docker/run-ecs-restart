@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ansible \* -m shell -a "sudo restart ecs"

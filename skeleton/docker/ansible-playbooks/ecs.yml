@@ -1,0 +1,31 @@
+---
+- hosts: appservers
+  tasks:
+    - name: install yum packages
+      yum:
+        name: awslogs
+        update_cache: yes
+      become: yes
+      notify:
+        - restart_awslogs
+    - name: setup awslogs configs
+      copy:
+        src: "{{ item }}"
+        dest: /etc/awslogs/
+        mode: 0644
+      with_fileglob:
+          - files/awslogs/*
+      become: yes
+      notify:
+        - restart_awslogs
+    - name: ensure awslogs start on boot
+      service:
+        name: awslogs
+        enabled: yes
+      become: yes
+  handlers:
+    - name: restart_awslogs
+      service:
+        name: awslogs
+        state: restarted
+      become: yes
