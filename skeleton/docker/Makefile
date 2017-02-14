@@ -97,11 +97,6 @@ ecs-up:
 ecs-stop:
 	BUILD_NO=$(BUILD_NO) ecs-cli compose --file docker-compose-ecs.yml service stop
 
-ecs-run-migrate:
-	# not really a ECS command, but it interacts with the ECS setup
-	# should run it after ecs-up, and LAN IP address whitelisted
-	./run-migrate
-
 ecs-ps:
 	ecs-cli ps
 
@@ -136,6 +131,20 @@ ec2-add-inbound-ssh:
 ecs-cluster-info: get-public-ip
 	# info used for ec2-add-inbound-ssh
 	@./ecs-get-cluster-info $(CLUSTER_NAME)
+
+# ------------------- #
+# ECS Utils / Helpers #
+# ------------------- #
+
+ecs-run-migrate:
+	# run the django migrate command in appserver
+	./run-migrate
+
+ecs-docker-logs:
+	./run-ecs-docker-logs
+
+ecs-restart-agent:
+	./run-ecs-restart
 
 # --------------- #
 # Helpers / Utils #
