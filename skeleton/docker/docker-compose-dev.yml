@@ -1,0 +1,18 @@
+version: '2'
+services:
+    appserver:
+        extends:
+            file: docker-compose.yml
+            service: appserver
+        entrypoint: ./run-appserver-dev
+        volumes:
+            - ../../:/app/src/YOUR_PROJECT_NAME/
+
+    dbserver:
+        extends:
+            file: docker-compose.yml
+            service: dbserver
+
+volumes:
+    YOUR_PROJECT_NAME_static:
+

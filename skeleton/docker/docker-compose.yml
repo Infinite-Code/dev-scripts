@@ -11,8 +11,8 @@ services:
         ports:
             - "80:80"
             - "443:443"
-        links:
-            - appserver
+        volumes:
+            - YOUR_PROJECT_NAME_static:/app/src/YOUR_PROJECT_NAME/static:ro
 
     appserver:
         build:
@@ -24,8 +24,6 @@ services:
             - "8000:8000"
         env_file:
             - appserver-dev.env
-        links:
-            - dbserver
 
     dbserver:
         build:
@@ -39,4 +37,7 @@ services:
         environment:
             - POSTGRES_USER=YOUR_DB_USERNAME
             - POSTGRES_DB=YOUR_DB_NAME
+
+volumes:
+    YOUR_PROJECT_NAME_static:
 

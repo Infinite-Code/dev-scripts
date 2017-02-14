@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/app/venv/YOUR_PROJECT_NAME/bin/pip install -r requirements-dev.txt
+/app/venv/YOUR_PROJECT_NAME/bin/python ./manage.py runserver 0.0.0.0:8000

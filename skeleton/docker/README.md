@@ -149,6 +149,10 @@ docker-machine version 0.8.0, build b85aac1
 
 Troubleshooting
 ---------------
+### Issues with Docker and AWS ECS
 Check here for more info:
  * https://github.com/Infinite-Code/dev-scripts/wiki/Troubleshooting-Docker-and-AWS-ECS
 
+### Static files not found
+ * Delete the container appserver and webserver container and try again,
+   ```docker-compose rm SERVICE_NAME```

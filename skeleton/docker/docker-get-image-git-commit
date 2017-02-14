@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+IMAGE_APPSERVER=${1}
+
+DOCKER_IMAGE_GIT_COMMIT=`docker run --rm --entrypoint cat ${IMAGE_APPSERVER} .gitcommit`
+echo DOCKER_IMAGE_GIT_COMMIT: ${DOCKER_IMAGE_GIT_COMMIT}
+
+echo ''
+echo 'Fetching latest commits from origin...'
+git fetch origin
+LATEST_MASTER_GIT_COMMIT=`git rev-parse origin/master`
+echo LATEST_MASTER_GIT_COMMIT: ${LATEST_MASTER_GIT_COMMIT}
+
+if [ "${DOCKER_IMAGE_GIT_COMMIT}" != "${LATEST_MASTER_GIT_COMMIT}" ]; then
+    echo -e "\033[31mWARNING: DOCKER_IMAGE_GIT_COMMIT != LATEST_MASTER_GIT_COMMIT\033[0m"
+    exit 1;
+else
+    echo -e "\033[32mOK: DOCKER_IMAGE_GIT_COMMIT == LATEST_MASTER_GIT_COMMIT\033[0m"
+fi
