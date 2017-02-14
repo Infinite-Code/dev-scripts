@@ -114,6 +114,23 @@ events field, the first item is the latest one:
 make ecs-service-info
 ```
 
+Manage your ECS EC2 Instance
+----------------------------
+
+Added ansible playbooks to configure the EC2 instance used by ECS,
+e.g. setup CloudWatch agent.
+
+NOTE: Please make sure you have virtualenv setup refs requirements.txt
+
+```
+ansible-playbook ansible-playbooks/ecs.yml
+```
+
+Also, there is a Makefile target to migrate the DB, powered by ansible.
+```
+make ecs-run-migrate
+```
+
 
 Versions
 --------
