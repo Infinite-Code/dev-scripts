@@ -82,6 +82,7 @@ endif
 run-bash:
 	docker exec -it $(CONTAINER) bash
 
+
 # ---------------------- #
 # Running Services (ECS) #
 # ---------------------- #
@@ -90,6 +91,11 @@ ecs-up:
 
 ecs-stop:
 	BUILD_NO=$(BUILD_NO) ecs-cli compose --file docker-compose-ecs.yml service stop
+
+ecs-run-migrate:
+	# not really a ECS command, but it interacts with the ECS setup
+	# should run it after ecs-up, and LAN IP address whitelisted
+	./run-migrate
 
 ecs-ps:
 	ecs-cli ps

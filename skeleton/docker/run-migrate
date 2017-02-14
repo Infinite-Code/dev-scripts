@@ -1,0 +1,6 @@
+#!/bin/bash
+
+HOST=YOUR_APPSERVER_HOST
+
+CONTAINER_ID=`ansible ${HOST} -m shell -a 'docker ps' | grep YOUR_PROJECT_NAME | awk '{print $1}'`
+ansible ${HOST} -m shell -a "docker exec ${CONTAINER_ID} /app/venv/YOUR_PROJECT_NAME/bin/python  /app/src/YOUR_PROJECT_NAME/manage.py migrate"
