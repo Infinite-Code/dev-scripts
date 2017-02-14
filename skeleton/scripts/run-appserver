@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/app/venv/YOUR_PROJECT_NAME/bin/python /app/src/YOUR_PROJECT_NAME/manage.py collectstatic --noinput
+/app/venv/YOUR_PROJECT_NAME/bin/gunicorn YOUR_PROJECT_NAME.wsgi --bind 0.0.0.0:8000 --error-logfile - --access-logfile -

@@ -17,11 +17,9 @@ RUN rm -Rf /app/pip-packages/
 # copy source code and settings
 COPY ./ /app/src/YOUR_PROJECT_NAME/
 COPY devops/files/YOUR_PROJECT_NAME/settings_local.py /app/src/YOUR_PROJECT_NAME/YOUR_PROJECT_NAME/
-RUN /app/venv/YOUR_PROJECT_NAME/bin/python /app/src/YOUR_PROJECT_NAME/manage.py collectstatic --noinput
 
 WORKDIR /app/src/YOUR_PROJECT_NAME
-ENTRYPOINT ["/app/venv/YOUR_PROJECT_NAME/bin/gunicorn", "YOUR_PROJECT_NAME.wsgi"]
-CMD ["--bind", "0.0.0.0:8000", "--error-logfile", "-", "--access-logfile", "-"]
+ENTRYPOINT ["./run-appserver"]
 EXPOSE 8000
 
 MAINTAINER Infinite Code
