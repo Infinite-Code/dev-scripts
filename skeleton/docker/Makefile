@@ -85,7 +85,7 @@ else
 endif
 
 run-bash:
-	docker exec -it $(CONTAINER) bash
+	docker exec -it $(CONTAINER) bash --rcfile devops/files/bash/bashrc
 
 
 # ---------------------- #
