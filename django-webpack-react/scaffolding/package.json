@@ -1,7 +1,7 @@
 {
-  "name": "demo",
+  "name": "App",
   "version": "0.0.1",
-  "description": "demo only",
+  "description": "",
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
@@ -26,7 +26,8 @@
   "scripts": {
     "dev": "webpack-dev-server",
     "prod": "NODE_ENV=production webpack",
-    "lint": "",
+    "lint": "eslint assets",
+    "fix": "eslint --fix assets",
     "test": ""
   }
 }
