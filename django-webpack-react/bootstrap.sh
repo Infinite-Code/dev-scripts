@@ -61,6 +61,7 @@ function bootstrap {
     cp scaffolding/babelrc $PROJECT_NAME/.babelrc
     cp scaffolding/eslintignore $PROJECT_NAME/.eslintignore
     cp scaffolding/gitignore $PROJECT_NAME/.gitignore
+    cp scaffolding/editorconfig $PROJECT_NAME/.editorconfig
     cp scaffolding/eslintrc.yaml $PROJECT_NAME/.eslintrc.yaml
 
     cp scaffolding/package.json $PROJECT_NAME/package.json
