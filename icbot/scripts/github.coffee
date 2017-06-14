@@ -9,6 +9,9 @@ module.exports = (robot) ->
         org = res.match[1]
         repo = res.match[2]
         type = res.match[3]
+        if type == 'tree'
+            # not supported, skip it
+            return
         if type == 'pull'
             type = 'pulls'
         issueNumber = res.match[4]
