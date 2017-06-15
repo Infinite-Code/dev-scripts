@@ -26,4 +26,4 @@ Quick Start
     ```
 
 5.  You should see that icbot has joined your Slack, invite it to your channel.
-    Currently icbot it hardcoded to ```moby-finance``` project.
+    NOTE: It is tested to work for Github Issues and Pulls.
