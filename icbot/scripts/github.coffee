@@ -21,4 +21,4 @@ module.exports = (robot) ->
             .get() (error, response, body) ->
                 data = JSON.parse body
                 typeDisplay = type.charAt(0).toUpperCase() + type.slice(1, type.length-1)
-                res.send "Github #{typeDisplay} #{issueNumber}: #{data.title} (#{data.user.login})"
+                res.send "Github #{typeDisplay} ##{issueNumber}: #{data.title} (#{data.user.login}, #{data.state})"
